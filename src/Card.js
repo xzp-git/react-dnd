@@ -1,5 +1,5 @@
 import {useRef} from "react";
-import { useDrag, useDrop } from "react-dnd";
+import { useDrag } from "./react-dnd";
 import { CARD } from './ItemTypes';
 const style = {
   backgroundColor: 'red',
@@ -11,32 +11,32 @@ const style = {
 
 
 export default function Card({id, text, index, moveCard}){
-  let ref = useRef();
+  let ref = useRef();//{current:null} div生成真实DOM后，会把DOM赋给ref.current
 
-  let [, drop] = useDrop({
-    accept:CARD,
-    collect:() => ({}),
-    hover(item, monitor){
-      //获取被拖动的卡片的索引 0
-      const dragIndex = item.index
+  // let [, drop] = useDrop({
+  //   accept:CARD,
+  //   collect:() => ({}),
+  //   hover(item, monitor){
+  //     //获取被拖动的卡片的索引 0
+  //     const dragIndex = item.index
 
-      //当前正在hover卡片的索引
-      const hoverIndex = index
-      if(dragIndex === hoverIndex){
-        return
-      }
-      const { top, bottom } = ref.current.getBoundingClientRect();
-      const halfOfHoverHeight = (bottom - top) / 2;
-      const { y } = monitor.getClientOffset();//event.clientY
-      const hoverClientY = y - top;
-      if ((dragIndex < hoverIndex && hoverClientY > halfOfHoverHeight)
-          || (dragIndex > hoverIndex && hoverClientY < halfOfHoverHeight)
-      ) {
-          moveCard(dragIndex, hoverIndex);
-          item.index = hoverIndex;
-      }
-    }
-  })
+  //     //当前正在hover卡片的索引
+  //     const hoverIndex = index
+  //     if(dragIndex === hoverIndex){
+  //       return
+  //     }
+  //     const { top, bottom } = ref.current.getBoundingClientRect();
+  //     const halfOfHoverHeight = (bottom - top) / 2;
+  //     const { y } = monitor.getClientOffset();//event.clientY
+  //     const hoverClientY = y - top;
+  //     if ((dragIndex < hoverIndex && hoverClientY > halfOfHoverHeight)
+  //         || (dragIndex > hoverIndex && hoverClientY < halfOfHoverHeight)
+  //     ) {
+  //         moveCard(dragIndex, hoverIndex);
+  //         item.index = hoverIndex;
+  //     }
+  //   }
+  // })
 
 
 
@@ -54,7 +54,7 @@ export default function Card({id, text, index, moveCard}){
   })
   const opacity = isDragging ? .3 : 1
   drag(ref)
-  drop(ref)
+  // drop(ref)
   return (
     <div ref={ref}  style={{...style, opacity}}>
       {text}
